@@ -11,16 +11,16 @@ import java.util.Hashtable;
 public class LectureFichier {
 
 	private ArrayList<String> mots;
-	private ArrayList<Integer> frequences;
-	private ArrayList<Integer> fichiers;
+	private ArrayList<ArrayList<Integer>> frequences;
+	private ArrayList<ArrayList<Integer>> fichiers;
 	private Hashtable<Integer, File> refFichiers;
 	
 
 	public LectureFichier(String adresseRepertoire) throws IOException {
 		super();
 		this.mots = new ArrayList<String>();
-		this.frequences = new ArrayList<Integer>();
-		this.fichiers = new ArrayList<Integer>();
+		this.frequences = new ArrayList<ArrayList<Integer>>();
+		this.fichiers = new ArrayList<ArrayList<Integer>>();
 		File repertoire = new File(adresseRepertoire);
 		BufferedReader br = null;
 		this.refFichiers = new Hashtable<>();
@@ -30,6 +30,14 @@ public class LectureFichier {
 			ArrayList<String> mots = this.motsFichier(br);
 			for(String mot : mots) {
 				int emplacement = this.trouvePosition(mot, mots);
+				if(emplacement < mots.size() & mots.get(emplacement).equals(mot)) {
+					if(fichiers.get(emplacement).get(fichiers.get(emplacement).size()-1) != numFichier) {
+						//frequences.set(emplacement, frequences.get(emplacement)+1);
+						
+					}
+				} else {
+					
+				}
 			}
 			
 			refFichiers.put(numFichier++, file);
