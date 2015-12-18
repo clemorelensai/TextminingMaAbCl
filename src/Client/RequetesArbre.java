@@ -5,7 +5,6 @@ import java.util.TreeSet;
 
 public class RequetesArbre implements Requetes {
 	
-	private Arbre arbre;
 
 	@Override
 	public ArrayList<String> requeteSimple(String terme) {

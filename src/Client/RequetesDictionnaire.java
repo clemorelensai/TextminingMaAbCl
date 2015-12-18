@@ -5,13 +5,12 @@ import java.util.TreeSet;
 
 public class RequetesDictionnaire implements Requetes {
 	
-	private Dictionnaire dico;
-	
+
 
 	@Override
 	public ArrayList<String> requeteSimple(String terme) {
-		// on récupère le tableau d'indexation avec dico
-		// on recherche le nb d'occurrences de t dans chaque document et on calcule un score (tdf/dff p. ex.)
+		// on récupère le fichier d'indexation
+		// on recherche le nb d'occurrences de t dans chaque document et on calcule un score (tdf/idf p. ex.)
 		// on retourne la liste des documents les plus pertinents
 		return null;
 	}
