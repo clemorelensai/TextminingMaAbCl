@@ -1,0 +1,61 @@
+package Client;
+
+import java.util.ArrayList;
+import java.util.TreeSet;
+
+public class RequetesDictionnaire implements Requetes {
+	
+	private Dictionnaire dico;
+	
+
+	@Override
+	public ArrayList<String> requeteSimple(String terme) {
+		// on récupère le tableau d'indexation avec dico
+		// on recherche le nb d'occurrences de t dans chaque document et on calcule un score (tdf/dff p. ex.)
+		// on retourne la liste des documents les plus pertinents
+		return null;
+	}
+
+	@Override
+	public TreeSet<String> requeteAnd(ArrayList<String> termes) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TreeSet<String> requeteOr(ArrayList<String> termes) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TreeSet<String> requeteXor(ArrayList<String> termes) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TreeSet<String> requeteNear(ArrayList<String> termes) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TreeSet<String> requeteNot(ArrayList<String> termes) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TreeSet<String> requeteSentence(ArrayList<String> termes) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TreeSet<String> requeteParagraph(ArrayList<String> termes) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}
