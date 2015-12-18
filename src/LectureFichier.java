@@ -15,7 +15,11 @@ public class LectureFichier {
 	private ArrayList<ArrayList<Integer>> fichiers;
 	private Hashtable<Integer, File> refFichiers;
 	
-
+	/**
+	 * Crée un dictionnaire des fréquences à partir d'un répertoire de fichiers texte
+	 * @param adresseRepertoire
+	 * @throws IOException
+	 */
 	public LectureFichier(String adresseRepertoire) throws IOException {
 		super();
 		this.mots = new ArrayList<String>();
@@ -25,18 +29,36 @@ public class LectureFichier {
 		BufferedReader br = null;
 		this.refFichiers = new Hashtable<>();
 		int numFichier = 1;
+		ArrayList<Integer> temp;
 		for(File file : repertoire.listFiles()) {
 			br = new BufferedReader(new FileReader(file));
 			ArrayList<String> mots = this.motsFichier(br);
 			for(String mot : mots) {
-				int emplacement = this.trouvePosition(mot, mots);
+				int emplacement = this.trouvePosition(mot);
+				
 				if(emplacement < mots.size() & mots.get(emplacement).equals(mot)) {
 					if(fichiers.get(emplacement).get(fichiers.get(emplacement).size()-1) != numFichier) {
-						//frequences.set(emplacement, frequences.get(emplacement)+1);
-						
+						//Le mot a déjà été vu, mais pas dans ce document
+						temp = frequences.get(emplacement);
+						temp.add(1);
+						frequences.set(emplacement, temp);
+						temp = fichiers.get(emplacement);
+						temp.add(numFichier);
+						frequences.set(emplacement, temp);
+					} else {
+						//Le mot a déjà été vu dans ce document
+						temp = frequences.get(emplacement);
+						temp.set(temp.size()-1, temp.get(temp.size()+1));
+						frequences.set(emplacement, temp);
 					}
 				} else {
-					
+					//Le mot n'a jamais été vu
+					temp = new ArrayList<>();
+					temp.add(1);
+					frequences.add(emplacement, temp);
+					temp = new ArrayList<>();
+					temp.add(numFichier);
+					frequences.add(emplacement, temp);
 				}
 			}
 			
@@ -44,6 +66,12 @@ public class LectureFichier {
 		}
 	}
 	
+	/**
+	 * Donne tous les mots lemmatisés du fichier passé en paramètre
+	 * @param br
+	 * @return
+	 * @throws IOException
+	 */
 	private ArrayList<String> motsFichier(BufferedReader br) throws IOException {
 		ArrayList<String> mots = new ArrayList<>();
 		String currentLine;
@@ -54,8 +82,36 @@ public class LectureFichier {
 		return mots;
 	}
 	
-	private int trouvePosition(String mot, ArrayList<String> dictionnaire) {
-		return 0;
+	/**
+	 * Donne la position dans le dictionnaire d'un mot qui peut déjà s'y trouver ou pas.
+	 * @param mot
+	 * @param dictionnaire
+	 * @return
+	 */
+	private int trouvePosition(String mot) {
+		boolean emplacementTrouve=false;
+		int res = 0;
+		int lower = 0;
+		int middle;
+		int upper = mots.size()-1;
+		if(mots.size() == 0) {
+			emplacementTrouve = true;
+		} else if(mot.compareTo(mots.get(upper))>0) {
+			res = mots.size();
+			emplacementTrouve = true;
+		}
+		while(!emplacementTrouve) {
+			middle = (lower+upper)/2;
+		}
+		return res;
+	}
+	
+	/**
+	 * Ajoute un fichier texte (et tous ses mots) à la classe actuelle
+	 * @param adresseFichier
+	 */
+	private void ajouteFichier(String adresseFichier) {
+		
 	}
 
 }
