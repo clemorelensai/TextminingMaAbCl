@@ -1,16 +1,19 @@
 package indexation;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Hashtable;
 
-public class LectureFichier {
+public class LectureFichier implements Serializable {
 
 	private ArrayList<String> mots;
 	private ArrayList<ArrayList<Integer>> frequences;
@@ -125,7 +128,7 @@ public class LectureFichier {
 	 * @param dictionnaire
 	 * @return
 	 */
-	private int trouvePosition(String mot) {
+	public int trouvePosition(String mot) {
 		boolean emplacementTrouve = false;
 		int res = 0;
 		int lower = 0;
@@ -157,7 +160,7 @@ public class LectureFichier {
 	 * 
 	 * @param adresseFichier
 	 */
-	private void ajouteFichier(String adresseFichier) {
+	public void ajouteFichier(String adresseFichier) {
 
 		File fichier = new File(adresseFichier);
 		int numFichier = this.refFichiers.size();
@@ -201,6 +204,25 @@ public class LectureFichier {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void serialisation() throws IOException {
+		FileOutputStream fileOut = new FileOutputStream("C:\\Users\\Ensai\\Documents\\TextMining\\index.ser");
+        ObjectOutputStream out = new ObjectOutputStream(fileOut);
+        out.writeObject(this);
+        out.close();
+        fileOut.close();
+        System.out.printf("Serialized data is saved in index.ser");
+	}
+	
+	public static LectureFichier deserialisation() throws IOException, ClassNotFoundException {
+		LectureFichier res;
+		FileInputStream fileIn = new FileInputStream("C:\\Users\\Ensai\\Documents\\TextMining\\index.ser");
+        ObjectInputStream in = new ObjectInputStream(fileIn);
+        res = (LectureFichier) in.readObject();
+        in.close();
+        fileIn.close();
+        return res;
 	}
 
 }
