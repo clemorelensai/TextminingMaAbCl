@@ -102,6 +102,15 @@ public class LectureFichier {
 		}
 		while(!emplacementTrouve) {
 			middle = (lower+upper)/2;
+			if(middle == lower) {
+				emplacementTrouve=true;
+				res = upper;
+			}
+			if(mot.compareTo(mots.get(middle))>0) {
+				lower = middle;
+			} else {
+				upper = middle;
+			}
 		}
 		return res;
 	}
