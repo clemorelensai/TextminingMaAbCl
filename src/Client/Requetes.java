@@ -7,6 +7,8 @@ import indexation.LectureFichier;
 
 public interface Requetes {
 	
+
+	
 	public ArrayList<Integer> requeteSimple(String terme);
 	// retourne les documents les plus pertinents dans la recherche de "terme"
 
