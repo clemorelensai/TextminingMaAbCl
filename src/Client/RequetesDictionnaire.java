@@ -3,8 +3,12 @@ package Client;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
+import indexation.LectureFichier;
+
 public class RequetesDictionnaire implements Requetes {
 	
+	
+	LectureFichier lectureFichier;
 
 
 	@Override
