@@ -18,15 +18,6 @@ public class RequetesDictionnaire implements Requetes {
 	
 	
 	
-	public double max(ArrayList<Double> list) {
-		double max=0;
-		for (int i=0;i<list.size();i++) {
-			if (max < i) {
-				max = i;
-			}
-		}
-		return max;
-	}
 	
 	public ArrayList<Integer> echangeInt(ArrayList<Integer> list, int i, int j) {
 		ArrayList<Integer> res = list;
@@ -45,24 +36,38 @@ public class RequetesDictionnaire implements Requetes {
 	}
 	
 	public ArrayList<Integer> triRespectif(ArrayList<Double> list1, ArrayList<Integer> list2) {
-		ArrayList<Integer> res = new ArrayList<Integer>();
 		if ((list1.size()==list2.size())) {
 			
+			
 			for (int j = 0;j<list1.size();j++) {
-				int i = j;
-				while(i!=max(list1)) {
-					i++;
+				double maxLocal = 0;
+				int indexMax = -1;
+				for (int i = j; i<list1.size();i++) {
+
+				if (list1.get(i) > maxLocal) {
+					maxLocal = list1.get(i);
+					indexMax = i;
 				}
-						list1 = echangeDouble(list1,i,j);
-						list2 = echangeInt(list2,i,j);
+
+					
+				}
+	
+						list1 = echangeDouble(list1,indexMax,j);
+						list2 = echangeInt(list2,indexMax,j);
+						
+	
+				
+			}
+					
+				
 				
 			}
 			
-		}
+		
 		else {
 			System.out.println("TAILLES NON COMPATIBLES (triRespectif)");
 		}
-		return res;
+		return list2;
 	}
 
 
