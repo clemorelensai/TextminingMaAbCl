@@ -36,11 +36,14 @@ public class LectureFichier {
 		ArrayList<Integer> temp;
 		for (File file : repertoire.listFiles()) {
 			br = new BufferedReader(new FileReader(file));
-			ArrayList<String> mots = this.motsFichier(br);
-			for (String mot : mots) {
+			ArrayList<String> motsDuFichier = this.motsFichier(br);
+			for (String mot : motsDuFichier) {
 				int emplacement = this.trouvePosition(mot);
-
-				if (emplacement < mots.size() & mots.get(emplacement).equals(mot)) {
+				boolean test = (emplacement < mots.size());
+				if(test) {
+					test = mots.get(emplacement).equals(mot);
+				}
+				if (test) {
 					if (fichiers.get(emplacement).get(fichiers.get(emplacement).size() - 1) != numFichier) {
 						// Le mot a déjà été vu, mais pas dans ce document
 						temp = frequences.get(emplacement);
@@ -48,11 +51,11 @@ public class LectureFichier {
 						frequences.set(emplacement, temp);
 						temp = fichiers.get(emplacement);
 						temp.add(numFichier);
-						frequences.set(emplacement, temp);
+						fichiers.set(emplacement, temp);
 					} else {
 						// Le mot a déjà été vu dans ce document
 						temp = frequences.get(emplacement);
-						temp.set(temp.size() - 1, temp.get(temp.size() + 1));
+						temp.set(temp.size() - 1, temp.get(temp.size() - 1) + 1);
 						frequences.set(emplacement, temp);
 					}
 				} else {
@@ -62,13 +65,40 @@ public class LectureFichier {
 					frequences.add(emplacement, temp);
 					temp = new ArrayList<>();
 					temp.add(numFichier);
-					frequences.add(emplacement, temp);
+					fichiers.add(emplacement, temp);
+					mots.add(emplacement, mot);
 				}
 			}
 
 			refFichiers.put(numFichier++, file);
 		}
 	}
+	
+	
+
+	public ArrayList<String> getMots() {
+		return mots;
+	}
+
+
+
+	public ArrayList<ArrayList<Integer>> getFrequences() {
+		return frequences;
+	}
+
+
+
+	public ArrayList<ArrayList<Integer>> getFichiers() {
+		return fichiers;
+	}
+
+
+
+	public Hashtable<Integer, File> getRefFichiers() {
+		return refFichiers;
+	}
+
+
 
 	/**
 	 * Donne tous les mots lemmatisés du fichier passé en paramètre
