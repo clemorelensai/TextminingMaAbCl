@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import Transformation.SuppressionTermes;
+
 public class Textmining {
 	
 	
@@ -20,24 +22,8 @@ public class Textmining {
 		
 		File file = new File("/home/clement/Documents/webdatamining/webDatamining sources v2/lemmatisation/faitsDivers_texte.96-1");
 		
-		BufferedReader br = null;
+		SuppressionTermes.supprimeTermesInutiles(file);
 		
-		// on prend un fichier
-		// si la 2ème colonne = prep, determinant...
-		// on fait rien
-		// sinon on insère la ligne dans un nouveau fichier "nettoyé"
-			br = new BufferedReader(new FileReader(file));
-			ArrayList<String> mots = new ArrayList<>();
-			String currentLine;
-			while ((currentLine = br.readLine()) != null) {
-				String[] ligne = currentLine.split("\t");
-				if (!ligne[ligne.length-2].equals("PRP") && !ligne[ligne.length-2].contains("DET")) {
-					// on peut écrire la ligne dans le nouveau fichier
-				}
-
-			}
-			
-			System.out.println(mots.toString());
 
 	}
 
