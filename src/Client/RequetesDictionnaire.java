@@ -5,13 +5,16 @@ import java.util.TreeSet;
 
 public class RequetesDictionnaire implements Requetes {
 	
-
+	private LectureFichier lectureFichier;
+	
 
 	@Override
 	public ArrayList<String> requeteSimple(String terme) {
 		// on récupère le fichier d'indexation
 		// on recherche le nb d'occurrences de t dans chaque document et on calcule un score (tdf/idf p. ex.)
 		// on retourne la liste des documents les plus pertinents
+		
+		
 		return null;
 	}
 
