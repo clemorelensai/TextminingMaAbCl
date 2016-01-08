@@ -23,7 +23,7 @@ public class SuppressionTermes {
 	
 	public static File supprimeTermesInutiles(File file) throws IOException {
 		
-		File newFile = new File(file.getName()+"_transf");
+		File newFile = new File("");
 		BufferedReader br = null;
 		BufferedWriter bw = null;
 		int fileSize = 0;
@@ -48,6 +48,7 @@ public class SuppressionTermes {
 					!ligne[ligne.length-2].contains("SEN") &&
 					!ligne[ligne.length-2].contains("KON") &&
 					!ligne[ligne.length-2].contains("ADV") &&
+					!ligne[ligne.length-2].contains("NUM") &&
 					!ligne[ligne.length-2].contains("PUN")) {
 					bw.write(currentLine); // on garde les noms, les adjectifs, les verbes
 					bw.newLine();
@@ -59,9 +60,9 @@ public class SuppressionTermes {
 			}
 			bw.close();
 			
-			System.out.println("Nombre de mots fichier initial : "+fileSize);
-			System.out.println("Nombre de mots fichier final : "+newFileSize);
-			System.out.println("Nombre de mots ignorés : "+(fileSize-newFileSize));
+			//System.out.println("Nombre de mots fichier initial : "+fileSize);
+			//System.out.println("Nombre de mots fichier final : "+newFileSize);
+			//System.out.println("Nombre de mots ignorés : "+(fileSize-newFileSize));
 			
 			return newFile;
 		
