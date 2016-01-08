@@ -3,30 +3,33 @@ package Client;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
+import indexation.LectureFichier;
+
 public interface Requetes {
 	
-	public ArrayList<String> requeteSimple(String terme);
+	public ArrayList<Integer> requeteSimple(String terme, LectureFichier index);
 	// retourne les documents les plus pertinents dans la recherche de "terme"
+
 	
-	public TreeSet<String> requeteAnd(ArrayList<String> termes);
+	public TreeSet<String> requeteAnd(ArrayList<String> termes, LectureFichier index);
 	// retourne les documents les plus pertinents contenant les termes "termes"
 	
-	public TreeSet<String> requeteOr(ArrayList<String> termes);
+	public TreeSet<String> requeteOr(ArrayList<String> termes, LectureFichier index);
 	// retourne les documents les plus pertinents contenant au moins l'un des termes parmi "termes"
 	
-	public TreeSet<String> requeteXor(ArrayList<String> termes);
+	public TreeSet<String> requeteXor(ArrayList<String> termes, LectureFichier index);
 	// retourne les documents les plus pertinents contenant un seul des termes parmi "termes"
 	
-	public TreeSet<String> requeteNear(ArrayList<String> termes);
+	public TreeSet<String> requeteNear(ArrayList<String> termes, LectureFichier index);
 	// retourne les documents les plus pertinents contenant les termes "termes" collés entre eux
 	
-	public TreeSet<String> requeteNot(ArrayList<String> termes);
+	public TreeSet<String> requeteNot(ArrayList<String> termes, LectureFichier index);
 	// retourne les documents les plus pertinents ne contenant PAS les termes "termes"
 	
-	public TreeSet<String> requeteSentence(ArrayList<String> termes);
+	public TreeSet<String> requeteSentence(ArrayList<String> termes, LectureFichier index);
 	// retourne les documents les plus pertinents contenant les termes "termes" dans une même phrase
 	
-	public TreeSet<String> requeteParagraph(ArrayList<String> termes);
+	public TreeSet<String> requeteParagraph(ArrayList<String> termes, LectureFichier index);
 	// retourne les documents les plus pertinents contenant les termes "termes" dans un même paragraphe
 	
 
