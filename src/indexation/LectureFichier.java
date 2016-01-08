@@ -1,4 +1,5 @@
 package indexation;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,9 +16,11 @@ public class LectureFichier {
 	private ArrayList<ArrayList<Integer>> frequences;
 	private ArrayList<ArrayList<Integer>> fichiers;
 	private Hashtable<Integer, File> refFichiers;
-	
+
 	/**
-	 * Crée un dictionnaire des fréquences à partir d'un répertoire de fichiers texte
+	 * Crée un dictionnaire des fréquences à partir d'un répertoire de fichiers
+	 * texte
+	 * 
 	 * @param adresseRepertoire
 	 * @throws IOException
 	 */
@@ -31,15 +34,15 @@ public class LectureFichier {
 		this.refFichiers = new Hashtable<>();
 		int numFichier = 1;
 		ArrayList<Integer> temp;
-		for(File file : repertoire.listFiles()) {
+		for (File file : repertoire.listFiles()) {
 			br = new BufferedReader(new FileReader(file));
 			ArrayList<String> mots = this.motsFichier(br);
-			for(String mot : mots) {
+			for (String mot : mots) {
 				int emplacement = this.trouvePosition(mot);
-				
-				if(emplacement < mots.size() & mots.get(emplacement).equals(mot)) {
-					if(fichiers.get(emplacement).get(fichiers.get(emplacement).size()-1) != numFichier) {
-						//Le mot a déjà été vu, mais pas dans ce document
+
+				if (emplacement < mots.size() & mots.get(emplacement).equals(mot)) {
+					if (fichiers.get(emplacement).get(fichiers.get(emplacement).size() - 1) != numFichier) {
+						// Le mot a déjà été vu, mais pas dans ce document
 						temp = frequences.get(emplacement);
 						temp.add(1);
 						frequences.set(emplacement, temp);
@@ -47,13 +50,13 @@ public class LectureFichier {
 						temp.add(numFichier);
 						frequences.set(emplacement, temp);
 					} else {
-						//Le mot a déjà été vu dans ce document
+						// Le mot a déjà été vu dans ce document
 						temp = frequences.get(emplacement);
-						temp.set(temp.size()-1, temp.get(temp.size()+1));
+						temp.set(temp.size() - 1, temp.get(temp.size() + 1));
 						frequences.set(emplacement, temp);
 					}
 				} else {
-					//Le mot n'a jamais été vu
+					// Le mot n'a jamais été vu
 					temp = new ArrayList<>();
 					temp.add(1);
 					frequences.add(emplacement, temp);
@@ -62,13 +65,14 @@ public class LectureFichier {
 					frequences.add(emplacement, temp);
 				}
 			}
-			
+
 			refFichiers.put(numFichier++, file);
 		}
 	}
-	
+
 	/**
 	 * Donne tous les mots lemmatisés du fichier passé en paramètre
+	 * 
 	 * @param br
 	 * @return
 	 * @throws IOException
@@ -78,36 +82,38 @@ public class LectureFichier {
 		String currentLine;
 		while ((currentLine = br.readLine()) != null) {
 			String[] ligne = currentLine.split("\t");
-			mots.add(ligne[ligne.length-1]);
+			mots.add(ligne[ligne.length - 1]);
 		}
 		return mots;
 	}
-	
+
 	/**
-	 * Donne la position dans le dictionnaire d'un mot qui peut déjà s'y trouver ou pas.
+	 * Donne la position dans le dictionnaire d'un mot qui peut déjà s'y trouver
+	 * ou pas.
+	 * 
 	 * @param mot
 	 * @param dictionnaire
 	 * @return
 	 */
 	private int trouvePosition(String mot) {
-		boolean emplacementTrouve=false;
+		boolean emplacementTrouve = false;
 		int res = 0;
 		int lower = 0;
 		int middle;
-		int upper = mots.size()-1;
-		if(mots.size() == 0) {
+		int upper = mots.size() - 1;
+		if (mots.size() == 0) {
 			emplacementTrouve = true;
-		} else if(mot.compareTo(mots.get(upper))>0) {
+		} else if (mot.compareTo(mots.get(upper)) > 0) {
 			res = mots.size();
 			emplacementTrouve = true;
 		}
-		while(!emplacementTrouve) {
-			middle = (lower+upper)/2;
-			if(middle == lower) {
-				emplacementTrouve=true;
+		while (!emplacementTrouve) {
+			middle = (lower + upper) / 2;
+			if (middle == lower) {
+				emplacementTrouve = true;
 				res = upper;
 			}
-			if(mot.compareTo(mots.get(middle))>0) {
+			if (mot.compareTo(mots.get(middle)) > 0) {
 				lower = middle;
 			} else {
 				upper = middle;
@@ -115,13 +121,56 @@ public class LectureFichier {
 		}
 		return res;
 	}
-	
+
 	/**
 	 * Ajoute un fichier texte (et tous ses mots) à la classe actuelle
+	 * 
 	 * @param adresseFichier
 	 */
 	private void ajouteFichier(String adresseFichier) {
-		
+
+		File fichier = new File(adresseFichier);
+		int numFichier = this.refFichiers.size();
+		this.refFichiers.put(numFichier, fichier);
+		ArrayList<Integer> temp;
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(fichier));
+			ArrayList<String> mots = this.motsFichier(br);
+			for (String mot : mots) {
+				int emplacement = this.trouvePosition(mot);
+
+				if (emplacement < mots.size() & mots.get(emplacement).equals(mot)) {
+					if (fichiers.get(emplacement).get(fichiers.get(emplacement).size() - 1) != numFichier) {
+						// Le mot a déjà été vu, mais pas dans ce document
+						temp = frequences.get(emplacement);
+						temp.add(1);
+						frequences.set(emplacement, temp);
+						temp = fichiers.get(emplacement);
+						temp.add(numFichier);
+						frequences.set(emplacement, temp);
+					} else {
+						// Le mot a déjà été vu dans ce document
+						temp = frequences.get(emplacement);
+						temp.set(temp.size() - 1, temp.get(temp.size() + 1));
+						frequences.set(emplacement, temp);
+					}
+				} else {
+					// Le mot n'a jamais été vu
+					temp = new ArrayList<>();
+					temp.add(1);
+					frequences.add(emplacement, temp);
+					temp = new ArrayList<>();
+					temp.add(numFichier);
+					frequences.add(emplacement, temp);
+				}
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
