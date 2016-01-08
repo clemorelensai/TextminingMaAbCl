@@ -19,6 +19,7 @@ public class LectureFichier implements Serializable {
 	private ArrayList<ArrayList<Integer>> frequences;
 	private ArrayList<ArrayList<Integer>> fichiers;
 	private Hashtable<Integer, File> refFichiers;
+	private int tailleRepertoire;
 
 	/**
 	 * Crée un dictionnaire des fréquences à partir d'un répertoire de fichiers
@@ -36,6 +37,7 @@ public class LectureFichier implements Serializable {
 		BufferedReader br = null;
 		this.refFichiers = new Hashtable<>();
 		int numFichier = 1;
+		tailleRepertoire = repertoire.listFiles().length;
 		ArrayList<Integer> temp;
 		for (File file : repertoire.listFiles()) {
 			br = new BufferedReader(new FileReader(file));
@@ -43,7 +45,7 @@ public class LectureFichier implements Serializable {
 			for (String mot : motsDuFichier) {
 				int emplacement = this.trouvePosition(mot);
 				boolean test = (emplacement < mots.size());
-				if(test) {
+				if (test) {
 					test = mots.get(emplacement).equals(mot);
 				}
 				if (test) {
@@ -76,32 +78,26 @@ public class LectureFichier implements Serializable {
 			refFichiers.put(numFichier++, file);
 		}
 	}
-	
-	
 
 	public ArrayList<String> getMots() {
 		return mots;
 	}
 
-
-
 	public ArrayList<ArrayList<Integer>> getFrequences() {
 		return frequences;
 	}
-
-
 
 	public ArrayList<ArrayList<Integer>> getFichiers() {
 		return fichiers;
 	}
 
-
-
 	public Hashtable<Integer, File> getRefFichiers() {
 		return refFichiers;
 	}
 
-
+	public int getTailleRepertoire() {
+		return tailleRepertoire;
+	}
 
 	/**
 	 * Donne tous les mots lemmatisés du fichier passé en paramètre
@@ -144,7 +140,7 @@ public class LectureFichier implements Serializable {
 			middle = (lower + upper) / 2;
 			if (middle == lower) {
 				emplacementTrouve = true;
-				if(mot.compareTo(mots.get(lower))==0) {
+				if (mot.compareTo(mots.get(lower)) == 0) {
 					res = lower;
 				} else {
 					res = upper;
@@ -209,24 +205,24 @@ public class LectureFichier implements Serializable {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void serialisation(String fichier) throws IOException {
 		FileOutputStream fileOut = new FileOutputStream(fichier);
-        ObjectOutputStream out = new ObjectOutputStream(fileOut);
-        out.writeObject(this);
-        out.close();
-        fileOut.close();
-        System.out.printf("Serialized data is saved in index.ser");
+		ObjectOutputStream out = new ObjectOutputStream(fileOut);
+		out.writeObject(this);
+		out.close();
+		fileOut.close();
+		System.out.printf("Serialized data is saved in index.ser");
 	}
-	
+
 	public static LectureFichier deserialisation(String fichier) throws IOException, ClassNotFoundException {
 		LectureFichier res;
 		FileInputStream fileIn = new FileInputStream(fichier);
-        ObjectInputStream in = new ObjectInputStream(fileIn);
-        res = (LectureFichier) in.readObject();
-        in.close();
-        fileIn.close();
-        return res;
+		ObjectInputStream in = new ObjectInputStream(fileIn);
+		res = (LectureFichier) in.readObject();
+		in.close();
+		fileIn.close();
+		return res;
 	}
 
 }
