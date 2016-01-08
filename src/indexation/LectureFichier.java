@@ -144,7 +144,11 @@ public class LectureFichier implements Serializable {
 			middle = (lower + upper) / 2;
 			if (middle == lower) {
 				emplacementTrouve = true;
-				res = upper;
+				if(mot.compareTo(mots.get(lower))==0) {
+					res = lower;
+				} else {
+					res = upper;
+				}
 			}
 			if (mot.compareTo(mots.get(middle)) > 0) {
 				lower = middle;
@@ -206,8 +210,8 @@ public class LectureFichier implements Serializable {
 		}
 	}
 	
-	public void serialisation() throws IOException {
-		FileOutputStream fileOut = new FileOutputStream("C:\\Users\\Ensai\\Documents\\TextMining\\index.ser");
+	public void serialisation(String fichier) throws IOException {
+		FileOutputStream fileOut = new FileOutputStream(fichier);
         ObjectOutputStream out = new ObjectOutputStream(fileOut);
         out.writeObject(this);
         out.close();
@@ -215,9 +219,9 @@ public class LectureFichier implements Serializable {
         System.out.printf("Serialized data is saved in index.ser");
 	}
 	
-	public static LectureFichier deserialisation() throws IOException, ClassNotFoundException {
+	public static LectureFichier deserialisation(String fichier) throws IOException, ClassNotFoundException {
 		LectureFichier res;
-		FileInputStream fileIn = new FileInputStream("C:\\Users\\Ensai\\Documents\\TextMining\\index.ser");
+		FileInputStream fileIn = new FileInputStream(fichier);
         ObjectInputStream in = new ObjectInputStream(fileIn);
         res = (LectureFichier) in.readObject();
         in.close();
