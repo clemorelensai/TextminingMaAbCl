@@ -13,7 +13,7 @@ public class Textmining {
 	
 
 	public static void main(String[] args) throws IOException {
-
+		
 		//TEST SELECTION DE MOTS (à mettre dans une nouvelle classe)
 		// 2 phases de sélection : une pré-indexation (on supprime tous les détermimants, prépositions....) et une post-indexation (en fonction des scores)
 		
