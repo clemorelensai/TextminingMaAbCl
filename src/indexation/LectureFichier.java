@@ -13,6 +13,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import Transformation.SuppressionTermes;
+
 public class LectureFichier implements Serializable {
 
 	private ArrayList<String> mots;
@@ -40,7 +42,7 @@ public class LectureFichier implements Serializable {
 		tailleRepertoire = repertoire.listFiles().length;
 		ArrayList<Integer> temp;
 		for (File file : repertoire.listFiles()) {
-			br = new BufferedReader(new FileReader(file));
+			br = new BufferedReader(new FileReader(SuppressionTermes.supprimeTermesInutiles(file)));
 			ArrayList<String> motsDuFichier = this.motsFichier(br);
 			for (String mot : motsDuFichier) {
 				int emplacement = this.trouvePosition(mot);
