@@ -142,7 +142,7 @@ public class LectureFichier implements Serializable {
 			middle = (lower + upper) / 2;
 			if (middle == lower) {
 				emplacementTrouve = true;
-				if (mot.compareTo(mots.get(lower)) == 0) {
+				if (mot.compareTo(mots.get(lower)) <= 0) {
 					res = lower;
 				} else {
 					res = upper;
