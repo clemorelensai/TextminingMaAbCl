@@ -20,7 +20,7 @@ public class LectureFichier implements Serializable {
 	private ArrayList<String> mots;
 	private ArrayList<ArrayList<Integer>> frequences;
 	private ArrayList<ArrayList<Integer>> fichiers;
-	private Hashtable<Integer, File> refFichiers;
+	private Hashtable<Integer[], File> refFichiers;
 	private int tailleRepertoire;
 
 	/**
@@ -41,6 +41,8 @@ public class LectureFichier implements Serializable {
 		int numFichier = 1;
 		tailleRepertoire = repertoire.listFiles().length;
 		ArrayList<Integer> temp;
+		Integer[] donneesFichier = null;
+		int tailleFichier = 0;
 		for (File file : repertoire.listFiles()) {
 			br = new BufferedReader(new FileReader(SuppressionTermes.supprimeTermesInutiles(file)));
 			ArrayList<String> motsDuFichier = this.motsFichier(br);
@@ -75,9 +77,12 @@ public class LectureFichier implements Serializable {
 					fichiers.add(emplacement, temp);
 					mots.add(emplacement, mot);
 				}
+				tailleFichier++;
 			}
-
-			refFichiers.put(numFichier++, file);
+			donneesFichier[0] = numFichier++;
+			donneesFichier[1] = tailleFichier;
+			refFichiers.put(donneesFichier, file);
+			tailleFichier = 0;
 		}
 	}
 
@@ -93,7 +98,7 @@ public class LectureFichier implements Serializable {
 		return fichiers;
 	}
 
-	public Hashtable<Integer, File> getRefFichiers() {
+	public Hashtable<Integer[], File> getRefFichiers() {
 		return refFichiers;
 	}
 
@@ -166,12 +171,13 @@ public class LectureFichier implements Serializable {
 
 		File fichier = new File(adresseFichier);
 		int numFichier = this.refFichiers.size();
-		this.refFichiers.put(numFichier, fichier);
 		ArrayList<Integer> temp;
+		int tailleFichier = 0;
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(fichier));
 			ArrayList<String> mots = this.motsFichier(br);
 			for (String mot : mots) {
+				tailleFichier++;
 				int emplacement = this.trouvePosition(mot);
 
 				if (emplacement < mots.size() & mots.get(emplacement).equals(mot)) {
@@ -199,6 +205,10 @@ public class LectureFichier implements Serializable {
 					frequences.add(emplacement, temp);
 				}
 			}
+			Integer[] donneesFichier = null;
+			donneesFichier[0] = numFichier;
+			donneesFichier[1] = tailleFichier;
+			this.refFichiers.put(donneesFichier, fichier);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
