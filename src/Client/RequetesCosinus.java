@@ -1,11 +1,12 @@
 package Client;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.TreeSet;
 
 import indexation.LectureFichier;
 
-public class RequetesCosinus implements Requetes {
+public class RequetesCosinus {
 	
 	private LectureFichier index;
 
@@ -68,7 +69,6 @@ public class RequetesCosinus implements Requetes {
 		return res;
 	}
 
-	@Override
 	public ArrayList<Integer> requeteSimple(String terme) {
 		ArrayList<Integer> documents = new ArrayList<Integer>();
 		ArrayList<Double> similarites = new ArrayList<Double>();
@@ -95,43 +95,65 @@ public class RequetesCosinus implements Requetes {
 		return documents;
 	}
 
-	@Override
-	public TreeSet<String> requeteAnd(ArrayList<String> termes) {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<Integer> requeteAnd(ArrayList<String> termes) {
+		ArrayList<Integer> res = new ArrayList<Integer>();
+		ArrayList<Double> similarites = new ArrayList<Double>();
+		HashMap<Integer, ArrayList<Integer>> documents = new HashMap<>();
+		int emplacement;
+		//docsMot : documents contenant le mot
+		ArrayList<Integer> docsMot;
+		ArrayList<Integer> temp;
+		for(int i=0; i<termes.size(); i++) {
+			emplacement = index.trouvePosition(termes.get(i));
+			if(index.getMots().get(emplacement).equals(termes.get(i))) {
+				docsMot = index.getFichiers().get(emplacement);
+				for(int j=0; j<docsMot.size(); j++) {
+					if(documents.containsKey(docsMot.get(j))) {
+						temp = documents.get(docsMot.get(j));
+					} else {
+						temp = new ArrayList<Integer>();
+						documents.put(docsMot.get(j), temp);
+					}
+					for(int k=temp.size(); k<i; k++) {
+						temp.add(0);
+					}
+					temp.add(index.getFrequences().get(emplacement).get(j));
+					documents.put(docsMot.get(j), temp);
+				}
+			}
+		}
+		
+		for(int i=0; i<documents.size(); i++) {
+			//TODO : a partir de la list des frequences par document, calculer la similarité
+		}
+		return res;
 	}
 
-	@Override
 	public TreeSet<String> requeteOr(ArrayList<String> termes) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public TreeSet<String> requeteXor(ArrayList<String> termes) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public TreeSet<String> requeteNear(ArrayList<String> termes) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public TreeSet<String> requeteNot(ArrayList<String> termes) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public TreeSet<String> requeteSentence(ArrayList<String> termes) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public TreeSet<String> requeteParagraph(ArrayList<String> termes) {
 		// TODO Auto-generated method stub
 		return null;
