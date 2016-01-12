@@ -2,6 +2,7 @@ package Client;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.TreeSet;
 
 import indexation.LectureFichier;
@@ -103,6 +104,7 @@ public class RequetesCosinus {
 		//docsMot : documents contenant le mot
 		ArrayList<Integer> docsMot;
 		ArrayList<Integer> temp;
+		double similarite;
 		for(int i=0; i<termes.size(); i++) {
 			emplacement = index.trouvePosition(termes.get(i));
 			if(index.getMots().get(emplacement).equals(termes.get(i))) {
@@ -123,9 +125,24 @@ public class RequetesCosinus {
 			}
 		}
 		
-		for(int i=0; i<documents.size(); i++) {
-			//TODO : a partir de la list des frequences par document, calculer la similarité
+		Iterator<Integer> it = documents.keySet().iterator();
+		while (it.hasNext()){
+		   int cle = it.next();
+		   ArrayList<Integer> doc1 = documents.get(cle);
+		   for(int i=doc1.size(); i<termes.size(); i++) {
+			   doc1.add(0);
+		   }
+
+		   ArrayList<Integer> doc2 = new ArrayList();
+		   for(int j=0; j<termes.size(); j++) {
+			   doc2.add(1);
+		   }
+		   similarite = this.calculSimilarite(doc1, doc2);
+		   int place = this.placeSimilarite(similarites, similarite);
+		   res.add(place, cle);
+		   similarites.add(place, similarite);
 		}
+		
 		return res;
 	}
 
