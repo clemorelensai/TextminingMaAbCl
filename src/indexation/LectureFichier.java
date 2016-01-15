@@ -12,6 +12,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Iterator;
 
 import Transformation.SuppressionTermes;
 
@@ -20,7 +21,7 @@ public class LectureFichier implements Serializable {
 	private ArrayList<String> mots;
 	private ArrayList<ArrayList<Integer>> frequences;
 	private ArrayList<ArrayList<Integer>> fichiers;
-	private Hashtable<Integer[], File> refFichiers;
+	private Hashtable<Integer, ArrayList<Object>> refFichiers;
 	private int tailleRepertoire;
 
 	/**
@@ -41,10 +42,11 @@ public class LectureFichier implements Serializable {
 		int numFichier = 1;
 		tailleRepertoire = repertoire.listFiles().length;
 		ArrayList<Integer> temp;
-		Integer[] donneesFichier = null;
+		ArrayList<Object> donneesFichier;
 		int tailleFichier = 0;
 		for (File file : repertoire.listFiles()) {
-			br = new BufferedReader(new FileReader(SuppressionTermes.supprimeTermesInutiles(file)));
+			donneesFichier = new ArrayList<>();
+			br = new BufferedReader(new FileReader(/*SuppressionTermes.supprimeTermesInutiles(file)*/file));
 			ArrayList<String> motsDuFichier = this.motsFichier(br);
 			for (String mot : motsDuFichier) {
 				int emplacement = this.trouvePosition(mot);
@@ -79,9 +81,9 @@ public class LectureFichier implements Serializable {
 				}
 				tailleFichier++;
 			}
-			donneesFichier[0] = numFichier++;
-			donneesFichier[1] = tailleFichier;
-			refFichiers.put(donneesFichier, file);
+			donneesFichier.add(file);
+			donneesFichier.add(tailleFichier);
+			refFichiers.put(numFichier++, donneesFichier);
 			tailleFichier = 0;
 		}
 	}
@@ -98,7 +100,7 @@ public class LectureFichier implements Serializable {
 		return fichiers;
 	}
 
-	public Hashtable<Integer[], File> getRefFichiers() {
+	public Hashtable<Integer, ArrayList<Object>> getRefFichiers() {
 		return refFichiers;
 	}
 
@@ -205,10 +207,10 @@ public class LectureFichier implements Serializable {
 					frequences.add(emplacement, temp);
 				}
 			}
-			Integer[] donneesFichier = null;
-			donneesFichier[0] = numFichier;
-			donneesFichier[1] = tailleFichier;
-			this.refFichiers.put(donneesFichier, fichier);
+			ArrayList<Object> donneesFichier = new ArrayList<>();
+			donneesFichier.add(tailleFichier);
+			donneesFichier.add(fichier);
+			this.refFichiers.put(numFichier, donneesFichier);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -235,6 +237,38 @@ public class LectureFichier implements Serializable {
 		in.close();
 		fileIn.close();
 		return res;
+	}
+	
+	public void supprimer(String fichier) {
+		File file = new File(fichier);
+		boolean trouve=false;
+		Iterator<Integer> it = refFichiers.keySet().iterator();
+		int numDoc = 0;
+		while (it.hasNext() && !trouve) {
+			int temp = it.next();
+			if(refFichiers.get(temp).get(0).equals(file)) {
+				trouve = true;
+				numDoc = temp;
+			}
+		}
+		if(!trouve) {
+			System.out.println("Le document a déjà été supprimé");
+		} else {
+			for(int i=0; i<fichiers.size(); i++) {
+				if(fichiers.get(i).contains(numDoc)) {
+					int position = fichiers.get(i).indexOf(numDoc);
+					fichiers.get(i).remove(position);
+					frequences.get(i).remove(position);
+					if(fichiers.get(i).isEmpty()) {
+						fichiers.remove(i);
+						frequences.remove(i);
+						mots.remove(i);
+						i--;
+					}
+				}
+				refFichiers.remove(numDoc);
+			}
+		}
 	}
 
 }
