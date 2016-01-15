@@ -61,20 +61,21 @@ public class RequetesDictionnaire implements Requetes {
 	
 	
 	public ArrayList<Integer> tfidf(String terme, ArrayList<Integer> documents) { // calcul le tfidf d'un terme au sein d'une liste de documents fournie
+		
 		int position = index.trouvePosition(terme);
 		ArrayList<Integer> tfidf = new ArrayList<Integer>();
 		
 		for(int i=0;i<documents.size();i++) {
 			double tf = index.getFrequences().get(position).get(i);
-			System.out.println("tf du document " + (toRef(documents).get(i)) + " : " + tf);
+			//System.out.println("tf du document " + (toRef(documents).get(i)) + " : " + tf);
 			double df = documents.size();
 			double idf = index.getTailleRepertoire()/Math.log10(df); 
-			System.out.println("idf du document " + (toRef(documents).get(i)) + " : " + idf);
+			//System.out.println("idf du document " + (toRef(documents).get(i)) + " : " + idf);
 			tfidf.add((int) (tf*idf));
-			System.out.println("tfidf du document " + (toRef(documents).get(i)) + "pour le mot " + terme + " : "+ tfidf.get(i));
+			//System.out.println("tfidf du document " + (toRef(documents).get(i)) + "pour le mot " + terme + " : "+ tfidf.get(i));
 		}
-		System.out.println("documents respectifs : " + toRef(documents).toString());
-		System.out.println("tf/idf respectifs : " + tfidf.toString());
+		//System.out.println("documents respectifs : " + toRef(documents).toString());
+		//System.out.println("tf/idf respectifs : " + tfidf.toString());
 		return tfidf;
 	}
 	
@@ -91,13 +92,14 @@ public class RequetesDictionnaire implements Requetes {
 
 
 	@Override
-	public ArrayList<Integer> requeteSimple(String terme) {//on a fait le choix d'utiliser deux listes diffÃ©rentes pour regrouper les fichiers et leur frÃ©quence respective, on aurait peut-Ãªtre pu utiliser un Treeset...
+	public ArrayList<Integer> requeteSimple(String terme) {//on a fait le choix d'utiliser deux listes différentes pour regrouper les fichiers et leur fréquence respective, on aurait peut-être pu utiliser un Treeset...
 		// on recherche le nb d'occurrences de t dans chaque document et on calcule un score (tdf/idf p. ex.)
+		System.out.println("Recherche du terme " + terme + " parmi les documents");
 		ArrayList<Integer> documents = new ArrayList<Integer>();
 		
 		int position = index.trouvePosition(terme);
 
-		if (index.getMots().get(position).equals(terme)) { // on vÃ©rifie que le mot figure bien dans l'index
+		if (index.getMots().get(position).equals(terme)) { // on vérifie que le mot figure bien dans l'index
 			System.out.println("Position du terme '" + terme + "' dans l'index : " + position);
 			
 			documents = index.getFichiers().get(position);
@@ -107,10 +109,20 @@ public class RequetesDictionnaire implements Requetes {
 				
 			ArrayList<Integer> tfidf = tfidf(terme,documents);
 				
-				documents = triRespectif(tfidf, documents); //rÃ©ordonnement des deux listes par ordre croissant du tfidf
+				documents = triRespectif(tfidf, documents); //réordonnement des deux listes par ordre croissant du tfidf
+				System.out.println("################################################################## \n");
+					int i = 0;
+					int d = 0;
+					while (i<20 && d < tfidf.size()) {
+					System.out.println("Document "+(d+1)+" : " + toRef(documents).get(d));
+					System.out.println("Pondération TF/IDF : " + tfidf.get(d));
+					System.out.println("**************************");
+					i++;
+					d++;
+					}
 				
-				System.out.println("Documents triÃ©s par pertinence : \n" + toRef(documents));
-				System.out.println("tf/idf associÃ©s : \n" + tfidf.toString());
+					
+				
 				
 				
 		}
@@ -120,12 +132,13 @@ public class RequetesDictionnaire implements Requetes {
 
 	@Override
 	public ArrayList<Integer> requeteAnd(ArrayList<String> termes) {
+		System.out.println("Recherche AND des terme " + termes.toString() + " parmi les documents");
 		ArrayList<Integer> documents = new ArrayList<Integer>();
 		
 		boolean presenceDansIndex = true;
 		
 		
-		for (int t=0;t<termes.size();t++) { //on vÃ©rifie que tous les mots figurent dans l'index
+		for (int t=0;t<termes.size();t++) { //on vérifie que tous les mots figurent dans l'index
 			
 			int position = index.trouvePosition(termes.get(t));
 			if (index.getMots().get(position).equals(termes.get(t))) {
@@ -140,7 +153,7 @@ public class RequetesDictionnaire implements Requetes {
 		}
 		if (presenceDansIndex) {
 			// documents contient actuellement la liste des documents qui contiennent le dernier terme
-			for (int t=0;t<termes.size()-1;t++) { // on raccourcit la liste au fur et Ã  mesure (et on exclut le dernier terme)
+			for (int t=0;t<termes.size()-1;t++) { // on raccourcit la liste au fur et à mesure (et on exclut le dernier terme)
 				int position = index.trouvePosition(termes.get(t));
 				ArrayList<Integer> documentsTerme = index.getFichiers().get(position);
 				for (int d=0;d<documents.size();d++) {
@@ -152,7 +165,7 @@ public class RequetesDictionnaire implements Requetes {
 			
 		}
 		ArrayList<Integer> tfidf = new ArrayList<Integer>();
-		for (int d=0;d<documents.size();d++) { // initialisation de la liste des tfidf Ã  0
+		for (int d=0;d<documents.size();d++) { // initialisation de la liste des tfidf à 0
 			tfidf.add(0);
 			
 		}
@@ -160,22 +173,30 @@ public class RequetesDictionnaire implements Requetes {
 		for (int t=0;t<termes.size();t++) {
 			
 			for(int d=0;d<tfidf.size();d++) {
-			System.out.println(toRef(documents).get(d));
-			System.out.println(tfidf(termes.get(t),documents).get(d));
-			tfidf.set(d, tfidf.get(d)+tfidf(termes.get(t),documents).get(d)); // sommation des listes (vÃ©rifier que c'est bien respectif)
+			//System.out.println(toRef(documents).get(d));
+			//System.out.println(tfidf(termes.get(t),documents).get(d));
+			tfidf.set(d, tfidf.get(d)+tfidf(termes.get(t),documents).get(d)); // sommation des listes (vérifier que c'est bien respectif)
 			}
 		//	System.out.println("boucle " + (t+1) +  " : ");
 		//	System.out.println("Documents : \n" + toRef(documents));
-		//	System.out.println("tf/idf associÃ©s : \n" + tfidf(termes.get(t),documents));
-		//	System.out.println("tf/idf associÃ©s : \n" + tfidf.toString());
+		//	System.out.println("tf/idf associés : \n" + tfidf(termes.get(t),documents));
+		//	System.out.println("tf/idf associés : \n" + tfidf.toString());
 			
 		}
 		
 		
-		documents = triRespectif(tfidf, documents); //rÃ©ordonnement des deux listes par ordre croissant du tfidf
+		//documents = triRespectif(tfidf, documents); //réordonnement des deux listes par ordre croissant du tfidf
 		
-		System.out.println("Documents triÃ©s par pertinence : \n" + toRef(documents));
-		System.out.println("tf/idf associÃ©s : \n" + tfidf.toString());
+		System.out.println("################################################################## \n");
+		int i = 0;
+		int d = 0;
+		while (i<20 && d < documents.size()) {
+		System.out.println("Document "+(d+1)+" : " + toRef(documents).get(d));
+		System.out.println("**************************");
+		i++;
+		d++;
+		}
+		//System.out.println("tf/idf associés : \n" + tfidf.toString());
 		
 		
 		return documents; 
@@ -185,12 +206,13 @@ public class RequetesDictionnaire implements Requetes {
 
 	@Override
 	public ArrayList<Integer> requeteOr(ArrayList<String> termes) {
+		System.out.println("Recherche OR des terme " + termes.toString() + " parmi les documents");
 		ArrayList<Integer> documents = new ArrayList<Integer>();
 		
 		boolean presenceDansIndex = false;
 		
 		
-		for (int t=0;t<termes.size();t++) { //on vÃ©rifie que tous les mots figurent dans l'index
+		for (int t=0;t<termes.size();t++) { //on vérifie que tous les mots figurent dans l'index
 			
 			int position = index.trouvePosition(termes.get(t));
 			if (index.getMots().get(position).equals(termes.get(t))) {
@@ -202,36 +224,44 @@ public class RequetesDictionnaire implements Requetes {
 		}
 		if (presenceDansIndex) {
 			// documents contient actuellement la liste des documents qui contiennent le dernier terme
-			for (int t=0;t<termes.size()-1;t++) { // on agrandit la liste au fur et Ã  mesure (et on exclut le dernier terme)
+			for (int t=0;t<termes.size()-1;t++) { // on agrandit la liste au fur et à mesure (et on exclut le dernier terme)
 
 				int position = index.trouvePosition(termes.get(t));
 				ArrayList<Integer> documentsTerme = index.getFichiers().get(position);
-				for (int d=0;d<documents.size();d++) {
-					if (!documents.contains(documentsTerme.get(d))); // on vÃ©rifie que documents ne contient pas dÃ©jÃ  d
-						if (!documentsTerme.contains(documents.get(d))) {
+				for (int d=0;d<documentsTerme.size();d++) {
+					if (!documents.contains(documentsTerme.get(d))) { // on vérifie que documents ne contient pas déjà d
 							documents.add(documentsTerme.get(d));
 						}
 				}
 			}
 			
 		}
-		ArrayList<Integer> tfidf = new ArrayList<Integer>();
-		for (int d=0;d<documents.size();d++) { // initialisation de la liste des tfidf Ã  0
-			tfidf.add(0);
-		}
+		//ArrayList<Integer> tfidf = new ArrayList<Integer>();
+		//
+		//for (int d=0;d<documents.size();d++) { // initialisation de la liste des tfidf à 0
+		//	tfidf.add(0);
+		//}
 		// Calcul du tf/idf par sommation des tfidf de chaque document
-		for (int t=0;t<termes.size();t++) {
-			for(int d=0;d<tfidf.size();d++) {
-			tfidf.set(d, tfidf.get(d)+tfidf(termes.get(t),documents).get(d)); // sommation des listes (vÃ©rifier que c'est bien respectif)
-			}
+		//for (int t=0;t<termes.size();t++) {
+		//	for(int d=0;d<tfidf.size();d++) {
+		//	tfidf.set(d, tfidf.get(d)+tfidf(termes.get(t),requeteSimple(termes.get(t))).get(d)); // sommation des listes (impropre d'appeler requeteSimple...)
+		//	}
+		//}
+		// ATTENTION si le document ne contient PAS le terme ça risque de buger
+		
+		
+		//documents = triRespectif(tfidf, documents); //réordonnement des deux listes par ordre croissant du tfidf
+		
+		System.out.println("################################################################## \n");
+		int i = 0;
+		int d = 0;
+		while (i<20 && d < documents.size()) {
+		System.out.println("Document "+(d+1)+" : " + toRef(documents).get(d));
+		System.out.println("**************************");
+		i++;
+		d++;
 		}
-		// ATTENTION si le document ne contient PAS le terme Ã§a risque de buger
-		
-		
-		documents = triRespectif(tfidf, documents); //rÃ©ordonnement des deux listes par ordre croissant du tfidf
-		
-		System.out.println("Documents triÃ©s par pertinence : \n" + toRef(documents));
-		System.out.println("tf/idf associÃ©s : \n" + tfidf.toString());
+		//System.out.println("tf/idf associés : \n" + tfidf.toString());
 		
 		
 		return documents; 
@@ -278,3 +308,4 @@ public class RequetesDictionnaire implements Requetes {
 	}
 
 }
+
