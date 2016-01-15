@@ -150,7 +150,7 @@ public class RequetesCosinus {
 		   similarites.add(place, similarite);
 		}
 		
-		for (int i = 0; i < res.size(); i++) {
+		for (int i = 0; i < 2; i++) {
 			System.out.println(index.getRefFichiers().get(res.get(i)));
 			System.out.println(similarites.get(i));
 		}
