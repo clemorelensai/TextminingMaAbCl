@@ -16,7 +16,7 @@ public class RequetesCosinus {
 		this.index = index;
 	}
 	
-	public double calculSimilarite(ArrayList<Integer> doc1, ArrayList<Integer> doc2) {
+	public double calculSimilarite(ArrayList<Integer> doc1, ArrayList<Integer> doc2, int tailleDoc) {
 		double res = 0;
 		for(int i=0; i<doc1.size(); i++) {
 			res += doc1.get(i)*doc2.get(i);
@@ -34,6 +34,8 @@ public class RequetesCosinus {
 		}
 		diviseur = Math.sqrt(diviseur);
 		res /= diviseur;
+		
+		res /=tailleDoc;
 		
 		return res;
 	}
@@ -79,11 +81,13 @@ public class RequetesCosinus {
 		double cos;
 		ArrayList<Integer> doc1 = new ArrayList<>();
 		ArrayList<Integer> doc2 = new ArrayList<>();
+		int tailleDoc;
 		
 		for(int i=0; i<index.getFrequences().get(numMot).size(); i++) {
 			doc1.add(1);
 			doc2.add(index.getFrequences().get(numMot).get(i));
-			cos = calculSimilarite(doc1, doc2);
+			tailleDoc = (int) index.getRefFichiers().get(index.getFichiers().get(numMot).get(i)).get(1);
+			cos = calculSimilarite(doc1, doc2, tailleDoc);
 			temp = placeSimilarite(similarites, cos);
 			
 			similarites.add(temp, cos);
@@ -96,10 +100,11 @@ public class RequetesCosinus {
 		return documents;
 	}
 
-	public ArrayList<Integer> requeteAnd(ArrayList<String> termes) {
+	public ArrayList<Integer> requeteOr(ArrayList<String> termes) {
 		ArrayList<Integer> res = new ArrayList<Integer>();
 		ArrayList<Double> similarites = new ArrayList<Double>();
 		HashMap<Integer, ArrayList<Integer>> documents = new HashMap<>();
+		ArrayList<Integer> tailles = new ArrayList<>();
 		int emplacement;
 		//docsMot : documents contenant le mot
 		ArrayList<Integer> docsMot;
@@ -107,20 +112,22 @@ public class RequetesCosinus {
 		double similarite;
 		for(int i=0; i<termes.size(); i++) {
 			emplacement = index.trouvePosition(termes.get(i));
-			if(index.getMots().get(emplacement).equals(termes.get(i))) {
-				docsMot = index.getFichiers().get(emplacement);
-				for(int j=0; j<docsMot.size(); j++) {
-					if(documents.containsKey(docsMot.get(j))) {
-						temp = documents.get(docsMot.get(j));
-					} else {
-						temp = new ArrayList<Integer>();
+			if(index.getMots().size()>emplacement) {
+				if(index.getMots().get(emplacement).equals(termes.get(i))) {
+					docsMot = index.getFichiers().get(emplacement);
+					for(int j=0; j<docsMot.size(); j++) {
+						if(documents.containsKey(docsMot.get(j))) {
+							temp = documents.get(docsMot.get(j));
+						} else {
+							temp = new ArrayList<Integer>();
+							documents.put(docsMot.get(j), temp);
+						}
+						for(int k=temp.size(); k<i; k++) {
+							temp.add(0);
+						}
+						temp.add(index.getFrequences().get(emplacement).get(j));
 						documents.put(docsMot.get(j), temp);
 					}
-					for(int k=temp.size(); k<i; k++) {
-						temp.add(0);
-					}
-					temp.add(index.getFrequences().get(emplacement).get(j));
-					documents.put(docsMot.get(j), temp);
 				}
 			}
 		}
@@ -137,31 +144,21 @@ public class RequetesCosinus {
 		   for(int j=0; j<termes.size(); j++) {
 			   doc2.add(1);
 		   }
-		   similarite = this.calculSimilarite(doc1, doc2);
+		   similarite = this.calculSimilarite(doc1, doc2, (int) index.getRefFichiers().get(cle).get(1));
 		   int place = this.placeSimilarite(similarites, similarite);
 		   res.add(place, cle);
 		   similarites.add(place, similarite);
 		}
 		
+		for (int i = 0; i < res.size(); i++) {
+			System.out.println(index.getRefFichiers().get(res.get(i)));
+			System.out.println(similarites.get(i));
+		}
+		
 		return res;
 	}
 
-	public TreeSet<String> requeteOr(ArrayList<String> termes) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public TreeSet<String> requeteXor(ArrayList<String> termes) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public TreeSet<String> requeteNear(ArrayList<String> termes) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public TreeSet<String> requeteNot(ArrayList<String> termes) {
+	public TreeSet<String> requeteAnd(ArrayList<String> termes) {
 		// TODO Auto-generated method stub
 		return null;
 	}
