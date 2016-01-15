@@ -13,10 +13,10 @@ public interface Requetes {
 	// retourne les documents les plus pertinents dans la recherche de "terme"
 
 	
-	public TreeSet<String> requeteAnd(ArrayList<String> termes);
+	public ArrayList<Integer> requeteAnd(ArrayList<String> termes);
 	// retourne les documents les plus pertinents contenant les termes "termes"
 	
-	public TreeSet<String> requeteOr(ArrayList<String> termes);
+	public ArrayList<Integer> requeteOr(ArrayList<String> termes);
 	// retourne les documents les plus pertinents contenant au moins l'un des termes parmi "termes"
 	
 	public TreeSet<String> requeteXor(ArrayList<String> termes);

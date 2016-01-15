@@ -21,9 +21,9 @@ public class SuppressionTermes {
         }
 	}
 	
-	public static File supprimeTermesInutiles(File file) throws IOException {
+	public static File supprimeTermesInutiles(File file) throws IOException { // cette fonction crée un nouveau fichier nettoyé (temp) qu'elle renvoie à la fin. A TESTER
 		
-		File newFile = new File("");
+		File newFile = new File("temp");
 		BufferedReader br = null;
 		BufferedWriter bw = null;
 		int fileSize = 0;
@@ -59,6 +59,7 @@ public class SuppressionTermes {
 				
 			}
 			bw.close();
+			br.close();
 			
 			//System.out.println("Nombre de mots fichier initial : "+fileSize);
 			//System.out.println("Nombre de mots fichier final : "+newFileSize);
