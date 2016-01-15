@@ -48,7 +48,6 @@ public class LectureFichier implements Serializable {
 			br = new BufferedReader(new FileReader(/*SuppressionTermes.supprimeTermesInutiles(file)*/file));
 			ArrayList<String> motsDuFichier = this.motsFichier(br);
 			for (String mot : motsDuFichier) {
-				//mot = Normalizer.normalize(mot, Normalizer.Form.NFD).replaceAll("[\u0300-\u036F]", "").toLowerCase();
 				int emplacement = this.trouvePosition(mot);
 				boolean test = (emplacement < mots.size());
 				if (test) {
