@@ -13,7 +13,7 @@ public class SuppressionTermes {
 	
 	public static void parcourtRepertoire(File repertoire) throws IOException {
     	File[] files=repertoire.listFiles();
-   	
+    	
         for (File file : files) { // on parcourt tous les fichiers du répertoire
         	
         	supprimeTermesInutiles(file);
