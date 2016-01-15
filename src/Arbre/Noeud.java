@@ -31,11 +31,6 @@ public Mot value;
 		Noeud.ajouter("romulus");
 		Noeud.ajouter("Rubens");
 		
-		Noeud.ajouter("ruber");
-		Noeud.ajouter("Rubicon");
-		Noeud.ajouter("Rubicundus");
-		Noeud.ajouter("Rub");
-		
 		Noeud.ajouter("web");
 		
 		Noeud.affichageArbre();
