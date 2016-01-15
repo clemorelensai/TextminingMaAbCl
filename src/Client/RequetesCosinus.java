@@ -1,6 +1,7 @@
 package Client;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TreeSet;
@@ -48,7 +49,7 @@ public class RequetesCosinus {
 		int upper = similarites.size() - 1;
 		if (similarites.size() == 0) {
 			emplacementTrouve = true;
-		} else if (similarite>similarites.get(upper)) {
+		} else if (similarite<similarites.get(upper)) {
 			res = similarites.size();
 			emplacementTrouve = true;
 		}
@@ -56,13 +57,13 @@ public class RequetesCosinus {
 			middle = (lower + upper) / 2;
 			if (middle == lower) {
 				emplacementTrouve = true;
-				if (similarite <= similarites.get(upper)) {
+				if (similarite >= similarites.get(lower)) {
 					res = lower;
 				} else {
 					res = upper;
 				}
 			}
-			if (similarite > similarites.get(middle)) {
+			if (similarite < similarites.get(middle)) {
 				lower = middle;
 			} else {
 				upper = middle;
@@ -150,11 +151,6 @@ public class RequetesCosinus {
 		   similarites.add(place, similarite);
 		}
 		
-		for (int i = 0; i < 2; i++) {
-			System.out.println(index.getRefFichiers().get(res.get(i)));
-			System.out.println(similarites.get(i));
-		}
-		
 		return res;
 	}
 
@@ -163,9 +159,10 @@ public class RequetesCosinus {
 		return null;
 	}
 
-	public TreeSet<String> requeteSentence(ArrayList<String> termes) {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<Integer> requeteSentence(String termes) {
+		String[] array = termes.split(" ");
+		ArrayList<String> mots = (ArrayList<String>) Arrays.asList(array);
+		return this.requeteOr(mots);
 	}
 
 	public TreeSet<String> requeteParagraph(ArrayList<String> termes) {

@@ -252,7 +252,7 @@ public class LectureFichier implements Serializable {
 			}
 		}
 		if(!trouve) {
-			System.out.println("Le document a déjà été supprimé");
+			System.out.println("Le document n'est pas dans le dictionnaire");
 		} else {
 			for(int i=0; i<fichiers.size(); i++) {
 				if(fichiers.get(i).contains(numDoc)) {
@@ -268,6 +268,7 @@ public class LectureFichier implements Serializable {
 				}
 				refFichiers.remove(numDoc);
 			}
+			System.out.println("Le document a été supprimé");
 		}
 	}
 
