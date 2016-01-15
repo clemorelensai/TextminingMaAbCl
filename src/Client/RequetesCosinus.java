@@ -161,7 +161,7 @@ public class RequetesCosinus {
 
 	public ArrayList<Integer> requeteSentence(String termes) {
 		String[] array = termes.split(" ");
-		ArrayList<String> mots = (ArrayList<String>) Arrays.asList(array);
+		ArrayList<String> mots = new ArrayList<>(Arrays.asList(array));
 		return this.requeteOr(mots);
 	}
 

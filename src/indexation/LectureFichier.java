@@ -10,11 +10,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
-
-import Transformation.SuppressionTermes;
 
 public class LectureFichier implements Serializable {
 
@@ -25,7 +24,7 @@ public class LectureFichier implements Serializable {
 	private int tailleRepertoire;
 
 	/**
-	 * Crée un dictionnaire des fréquences à partir d'un répertoire de fichiers
+	 * Crï¿½e un dictionnaire des frï¿½quences ï¿½ partir d'un rï¿½pertoire de fichiers
 	 * texte
 	 * 
 	 * @param adresseRepertoire
@@ -49,6 +48,7 @@ public class LectureFichier implements Serializable {
 			br = new BufferedReader(new FileReader(/*SuppressionTermes.supprimeTermesInutiles(file)*/file));
 			ArrayList<String> motsDuFichier = this.motsFichier(br);
 			for (String mot : motsDuFichier) {
+				//mot = Normalizer.normalize(mot, Normalizer.Form.NFD).replaceAll("[\u0300-\u036F]", "").toLowerCase();
 				int emplacement = this.trouvePosition(mot);
 				boolean test = (emplacement < mots.size());
 				if (test) {
@@ -56,7 +56,7 @@ public class LectureFichier implements Serializable {
 				}
 				if (test) {
 					if (fichiers.get(emplacement).get(fichiers.get(emplacement).size() - 1) != numFichier) {
-						// Le mot a déjà été vu, mais pas dans ce document
+						// Le mot a dï¿½jï¿½ ï¿½tï¿½ vu, mais pas dans ce document
 						temp = frequences.get(emplacement);
 						temp.add(1);
 						frequences.set(emplacement, temp);
@@ -64,13 +64,13 @@ public class LectureFichier implements Serializable {
 						temp.add(numFichier);
 						fichiers.set(emplacement, temp);
 					} else {
-						// Le mot a déjà été vu dans ce document
+						// Le mot a dï¿½jï¿½ ï¿½tï¿½ vu dans ce document
 						temp = frequences.get(emplacement);
 						temp.set(temp.size() - 1, temp.get(temp.size() - 1) + 1);
 						frequences.set(emplacement, temp);
 					}
 				} else {
-					// Le mot n'a jamais été vu
+					// Le mot n'a jamais ï¿½tï¿½ vu
 					temp = new ArrayList<>();
 					temp.add(1);
 					frequences.add(emplacement, temp);
@@ -109,13 +109,13 @@ public class LectureFichier implements Serializable {
 	}
 
 	/**
-	 * Donne tous les mots lemmatisés du fichier passé en paramètre
+	 * Donne tous les mots lemmatisï¿½s du fichier passï¿½ en paramï¿½tre
 	 * 
 	 * @param br
 	 * @return
 	 * @throws IOException
 	 */
-	private ArrayList<String> motsFichier(BufferedReader br) throws IOException {
+	private static ArrayList<String> motsFichier(BufferedReader br) throws IOException {
 		ArrayList<String> mots = new ArrayList<>();
 		String currentLine;
 		while ((currentLine = br.readLine()) != null) {
@@ -126,7 +126,7 @@ public class LectureFichier implements Serializable {
 	}
 
 	/**
-	 * Donne la position dans le dictionnaire d'un mot qui peut déjà s'y trouver
+	 * Donne la position dans le dictionnaire d'un mot qui peut dï¿½jï¿½ s'y trouver
 	 * ou pas.
 	 * 
 	 * @param mot
@@ -165,7 +165,7 @@ public class LectureFichier implements Serializable {
 	}
 
 	/**
-	 * Ajoute un fichier texte (et tous ses mots) à la classe actuelle
+	 * Ajoute un fichier texte (et tous ses mots) ï¿½ la classe actuelle
 	 * 
 	 * @param adresseFichier
 	 */
@@ -184,7 +184,7 @@ public class LectureFichier implements Serializable {
 
 				if (emplacement < mots.size() & mots.get(emplacement).equals(mot)) {
 					if (fichiers.get(emplacement).get(fichiers.get(emplacement).size() - 1) != numFichier) {
-						// Le mot a déjà été vu, mais pas dans ce document
+						// Le mot a dï¿½jï¿½ ï¿½tï¿½ vu, mais pas dans ce document
 						temp = frequences.get(emplacement);
 						temp.add(1);
 						frequences.set(emplacement, temp);
@@ -192,13 +192,13 @@ public class LectureFichier implements Serializable {
 						temp.add(numFichier);
 						frequences.set(emplacement, temp);
 					} else {
-						// Le mot a déjà été vu dans ce document
+						// Le mot a dï¿½jï¿½ ï¿½tï¿½ vu dans ce document
 						temp = frequences.get(emplacement);
 						temp.set(temp.size() - 1, temp.get(temp.size() + 1));
 						frequences.set(emplacement, temp);
 					}
 				} else {
-					// Le mot n'a jamais été vu
+					// Le mot n'a jamais ï¿½tï¿½ vu
 					temp = new ArrayList<>();
 					temp.add(1);
 					frequences.add(emplacement, temp);
@@ -268,7 +268,7 @@ public class LectureFichier implements Serializable {
 				}
 				refFichiers.remove(numDoc);
 			}
-			System.out.println("Le document a été supprimé");
+			System.out.println("Le document a ï¿½tï¿½ supprimï¿½");
 		}
 	}
 
